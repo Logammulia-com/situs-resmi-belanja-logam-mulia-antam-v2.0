@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANTAMA | Harga Emas</title>
+  <link rel="stylesheet" href="harga.css" />
+
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c1a14a">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANTAMA">
+<link rel="icon" href="icon-512.png" type="image/png">
+
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">ANTAMA</div>
+      <nav>
+        <a href="home.html">← Kembali ke Beranda</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container">
+    <h2>Harga Emas Hari Ini</h2>
+    <p class="subtitle">Daftar harga emas ANTAM terbaru berdasarkan berat (gram)</p>
+    <div id="hargaContainer" class="harga-list"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    © 2025 ANTAMA — Emas & Investasi Terpercaya
+  </footer>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" onclick="window.location.href='home.html'">
+      🏠<span>Beranda</span>
+    </button>
+    <button class="nav-btn active">
+      💰<span>Harga</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='home.html#cartSection'">
+      🛒<span>Keranjang</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='home.html#akunSection'">
+      👤<span>Akun</span>
+    </button>
+  </nav>
+
+  <script src="harga.js" defer></script>
+</body>
+</html>

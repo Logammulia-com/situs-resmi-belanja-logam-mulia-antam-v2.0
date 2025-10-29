@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANTAMA | Beranda</title>
+  <link rel="stylesheet" href="home.css" />
+
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c1a14a">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANTAMA">
+<link rel="icon" href="icon-512.png" type="image/png">
+
+</head>
+<body>
+  <!-- HEADER -->
+  <!-- HEADER -->
+<header class="mobile-header">
+  <div class="logo">ANTAMA</div>
+
+  <div class="header-search">
+    <input type="text" id="searchInput" placeholder="Cari produk emas...">
+    <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png"
+         id="searchIcon"
+         class="search-icon"
+         alt="Cari">
+  </div>
+
+  <div class="header-icons">
+    <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png"
+         id="headerAccountIcon"
+         class="icon"
+         alt="Akun">
+  </div>
+</header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- PRODUK -->
+    <section id="produkSection" class="page active">
+      <h2 class="section-title">Produk Emas ANTAM</h2>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <!-- HARGA -->
+    <section id="hargaSection" class="page">
+      <h2 class="section-title">Harga Emas Hari Ini</h2>
+      <div id="hargaList" class="harga-list"></div>
+    </section>
+
+    <!-- KERANJANG -->
+    <section id="cartSection" class="page">
+      <h2 class="section-title">Keranjang</h2>
+      <div id="cartContainer" class="cart-list"></div>
+      <button id="checkoutBtn" class="btn checkout-btn">Lanjut ke Checkout</button>
+    </section>
+
+    <!-- AKUN -->
+    <section id="akunSection" class="page">
+      <h2 class="section-title">Akun Saya</h2>
+      <div class="akun-box">
+        <p><strong id="userName"></strong></p>
+        <p><small id="userEmail"></small></p>
+        <hr>
+        <label>Alamat</label>
+        <input id="alamatInput" type="text" placeholder="Alamat..." />
+        <label>No. HP</label>
+        <input id="phoneInput" type="text" placeholder="Nomor telepon..." />
+        <button id="saveProfileBtn" class="btn small">Simpan</button>
+        <button id="logoutBtn" class="btn small red">Logout</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL PRODUK -->
+  <div id="productModal" class="modal">
+    <div class="modal-content" id="modalContent">
+      <img src="" alt="">
+      <h3></h3>
+      <p id="modalPrice"></p>
+      <button class="close-modal" id="closeModal">Tutup</button>
+    </div>
+  </div>
+
+  <!-- NAV BOTTOM -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-target="produkSection">🏠<span>Beranda</span></button>
+    <button class="nav-btn" id="hargaBtn">💰<span>Harga</span></button>
+    <button class="nav-btn" data-target="cartSection">🛒<span>Keranjang</span></button>
+    <button class="nav-btn" id="akunBtn">👤<span>Akun</span></button>
+  </nav>
+
+  <script src="home.js"></script>
+</body>
+</html>

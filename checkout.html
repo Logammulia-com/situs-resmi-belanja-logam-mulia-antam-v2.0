@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ANTAMA | Checkout</title>
+  <link rel="stylesheet" href="checkout.css" />
+
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c1a14a">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANTAMA">
+<link rel="icon" href="icon-512.png" type="image/png">
+
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">ANTAMA</div>
+      <nav>
+        <a href="home.html">← Kembali ke Beranda</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Checkout</h2>
+
+    <!-- Tahap 1 -->
+    <section id="checkoutStep1" class="checkout-section">
+      <div class="checkout-left">
+        <h3>Ringkasan Belanja</h3>
+        <div id="checkoutList" class="checkout-list"></div>
+        <div class="total">
+          <strong>Total:</strong> <span id="checkoutTotal">Rp 0</span>
+        </div>
+      </div>
+
+      <div class="checkout-right">
+        <h3>Alamat & Pembayaran</h3>
+
+        <div class="form-group">
+          <label>Gunakan Alamat</label>
+          <div class="address-opt">
+            <label><input type="radio" name="addressOpt" value="saved" checked> Tersimpan</label>
+            <label><input type="radio" name="addressOpt" value="new"> Baru</label>
+          </div>
+        </div>
+
+        <div id="savedBox" class="saved-box">
+          <p id="savedAddress">-</p>
+        </div>
+
+        <div id="newBox" class="form-new" style="display:none;">
+          <label>Nama Lengkap</label>
+          <input id="checkoutName" type="text" placeholder="Nama Lengkap">
+          <label>Email</label>
+          <input id="checkoutEmail" type="email" placeholder="email@domain.com">
+          <label>No. HP</label>
+          <input id="checkoutPhone" type="text" placeholder="08xx...">
+          <label>Alamat Lengkap</label>
+          <textarea id="checkoutAlamat" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Metode Pembayaran</label>
+          <div class="pay-methods">
+            <label><input type="radio" name="payment" value="transfer" checked> Transfer Bank</label>
+            <label><input type="radio" name="payment" value="ewallet"> E-Wallet (DANA / OVO / GoPay)</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Catatan (opsional)</label>
+          <textarea id="orderNote" rows="2"></textarea>
+        </div>
+
+        <button id="nextToPayment" class="btn">Lanjutkan ke Pembayaran</button>
+      </div>
+    </section>
+
+    <!-- Tahap 2 -->
+    <section id="checkoutStep2" class="checkout-section" style="display:none;">
+      <div class="checkout-left">
+        <h3>Detail Pembayaran</h3>
+        <div id="paymentInfo" class="transfer-info"></div>
+        <div class="total">
+          <strong>Total Bayar:</strong> <span id="finalTotal">Rp 0</span>
+        </div>
+      </div>
+
+      <div class="checkout-right">
+        <h3>Konfirmasi Pembayaran</h3>
+        <p>Silakan lakukan pembayaran ke rekening di atas sesuai metode yang kamu pilih. Setelah membayar, tekan tombol di bawah ini.</p>
+        <button id="confirmPayment" class="btn">Saya Sudah Bayar</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 ANTAMA — Emas & Investasi Terpercaya
+  </footer>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn" onclick="window.location.href='home.html'">
+      🏠<span>Beranda</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='harga.html'">
+      💰<span>Harga</span>
+    </button>
+    <button class="nav-btn active">
+      🛒<span>Checkout</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='home.html#akunSection'">
+      👤<span>Akun</span>
+    </button>
+  </nav>
+
+  <script src="checkout.js" defer></script>
+</body>
+</html>

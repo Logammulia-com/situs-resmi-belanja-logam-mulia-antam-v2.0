@@ -1,0 +1,166 @@
+:root {
+  --gold: #c1a14a;
+  --gold-dark: #b0913e;
+  --bg: #f6f6f6;
+  --shadow: 0 4px 14px rgba(0,0,0,0.07);
+  --radius: 10px;
+  --font: "Poppins", sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: #333;
+}
+
+/* Header */
+.site-header {
+  background: #fff;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 1.4rem;
+}
+a { text-decoration: none; color: var(--gold-dark); }
+
+/* Layout */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 15px 100px;
+}
+.checkout-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+@media(max-width:900px){
+  .checkout-section{ grid-template-columns: 1fr; }
+}
+
+/* Ringkasan */
+.checkout-left {
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+}
+.checkout-item {
+  display:grid;
+  grid-template-columns:70px 1fr auto;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid #eee;
+  padding:10px 0;
+}
+.item-thumb img { width:70px; height:70px; object-fit:cover; border-radius:8px; }
+.item-info h4 { margin:0; font-size:0.95rem; }
+.item-info p { margin:4px 0; color:#666; font-size:0.9rem; }
+.item-actions { text-align:right; }
+.item-actions .remove-btn {
+  color:#e74c3c; border:none; background:none; cursor:pointer; font-size:0.85rem;
+}
+
+.total { text-align:right; margin-top:10px; font-weight:700; color:var(--gold-dark); }
+
+/* Form */
+.checkout-right {
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+}
+.form-group{ margin-bottom:15px; }
+label{ display:block; margin-bottom:5px; font-weight:500; }
+input,textarea{ width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--radius); }
+textarea{ resize:vertical; }
+
+.address-opt label{ display:block; margin:5px 0; }
+.pay-methods label{ display:block; margin:5px 0; }
+
+.transfer-info {
+  background:#fff9e6;
+  padding:10px;
+  border:1px solid #f1e3a3;
+  border-radius:8px;
+  margin-bottom:15px;
+}
+
+.saved-box {
+  background:#fafafa;
+  border:1px dashed #ccc;
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:15px;
+}
+
+/* Button */
+.btn{
+  background:var(--gold);
+  color:#fff;
+  border:none;
+  border-radius:var(--radius);
+  padding:12px;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  width:100%;
+}
+.btn:hover{ background:var(--gold-dark); }
+
+/* Footer & Bottom nav */
+.site-footer {
+  text-align:center;
+  background:#fff;
+  padding:20px;
+  font-size:0.9rem;
+  color:#777;
+}
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+  background:#fff;
+  border-top:1px solid #eee;
+  box-shadow:0 -2px 10px rgba(0,0,0,0.05);
+}
+.nav-btn {
+  flex:1;
+  border:none;
+  background:none;
+  padding:10px 0;
+  font-size:1.1rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  color:#777;
+  cursor:pointer;
+}
+.nav-btn.active, .nav-btn:hover{ color:var(--gold-dark); }
+.nav-btn span{ font-size:0.8rem; }
+/* Tambahan di bawah file CSS lama */
+.transfer-info {
+  background:#fff9e6;
+  border:1px solid #f1e3a3;
+  border-radius:8px;
+  padding:15px;
+  margin-bottom:20px;
+}

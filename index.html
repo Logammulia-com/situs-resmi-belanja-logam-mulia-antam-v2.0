@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANTAMA | Login & Register</title>
+  <style>
+    * {box-sizing: border-box; font-family: "Poppins", sans-serif;}
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #f0f0f0, #d7e1ec);
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white; width: 400px; padding: 40px 30px;
+      border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center; transition: all 0.3s ease;
+    }
+    .logo {font-size: 2rem; font-weight: 700; color: #c1a14a; margin-bottom: 20px;}
+    form {display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.4s ease;}
+    form.active {display: flex;}
+    input {
+      padding: 12px; border: 1px solid #ccc; border-radius: 10px;
+      font-size: 1rem; transition: 0.2s;
+    }
+    input:focus {
+      border-color: #c1a14a; outline: none;
+      box-shadow: 0 0 0 2px rgba(193,161,74,0.2);
+    }
+    button {
+      background: #c1a14a; color: white; border: none; padding: 12px;
+      border-radius: 10px; font-size: 1rem; cursor: pointer; transition: 0.3s;
+    }
+    button:hover {background: #b0913e;}
+    .toggle {margin-top: 15px; font-size: 0.9rem;}
+    .toggle a {color: #c1a14a; cursor: pointer; text-decoration: none; font-weight: 600;}
+    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">ANTAMA</div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="active">
+      <h2>Masuk ke Akun</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <div class="toggle">
+        Belum punya akun? <a id="showRegister">Daftar</a>
+      </div>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="registerForm">
+      <h2>Buat Akun Baru</h2>
+      <input type="text" id="registerName" placeholder="Nama Lengkap" required>
+      <input type="email" id="registerEmail" placeholder="Email" required>
+      <input type="password" id="registerPassword" placeholder="Password" required>
+      <button type="submit">Daftar</button>
+      <div class="toggle">
+        Sudah punya akun? <a id="showLogin">Login</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Konfigurasi JSONbin
+    const BIN_ID = "6901583b43b1c97be9887dd7";
+const API_KEY = "$2a$10$0anQ3oYLmC5xQJJti0cpMOC9GT3eb1zXjzykbd5Jz92u3qrYuT3F2";
+    const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const showRegister = document.getElementById("showRegister");
+    const showLogin = document.getElementById("showLogin");
+
+    showRegister.addEventListener("click", () => {
+      loginForm.classList.remove("active");
+      registerForm.classList.add("active");
+    });
+
+    showLogin.addEventListener("click", () => {
+      registerForm.classList.remove("active");
+      loginForm.classList.add("active");
+    });
+
+    // Ambil semua user dari JSONbin
+    async function getUsers() {
+      const res = await fetch(BASE_URL + "/latest", {
+        headers: { "X-Master-Key": API_KEY }
+      });
+      const data = await res.json();
+      return data.record.users;
+    }
+
+    // Simpan data user ke JSONbin
+    async function saveUsers(users) {
+      await fetch(BASE_URL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": API_KEY
+        },
+        body: JSON.stringify({ users })
+      });
+    }
+
+    // Register user baru
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("registerName").value;
+      const email = document.getElementById("registerEmail").value;
+      const password = document.getElementById("registerPassword").value;
+
+      const users = await getUsers();
+      const existing = users.find(u => u.email === email);
+      if (existing) {
+        alert("Email sudah terdaftar!");
+        return;
+      }
+
+      users.push({ name, email, password });
+      await saveUsers(users);
+      alert("Registrasi berhasil! Silakan login.");
+      showLogin.click();
+    });
+
+    // Login
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const users = await getUsers();
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        alert("Login berhasil! Selamat datang, " + user.name);
+        localStorage.setItem("antamaUser", JSON.stringify(user));
+        window.location.href = "home.html"; // pindah ke halaman produk
+      } else {
+        alert("Email atau password salah!");
+      }
+    });
+  </script>
+</body>
+</html>
