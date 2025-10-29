@@ -1,27 +1,32 @@
-// === KONFIGURASI JSONBIN ===
-const BIN_USERS = "6901583b43b1c97be9887dd7"; // user & pesanan
-const BIN_REKENING = "6901807043b1c97be988e00f"; // 🏦 rekening admin (ganti sesuai ID kamu)
+// ===================== KONFIGURASI JSONBIN =====================
+const BIN_USERS = "6901583b43b1c97be9887dd7"; // user
+const BIN_HARGA = "69016b77ae596e708f34751c"; // harga (tidak langsung dipakai)
+const BIN_PRODUK = "6901673443b1c97be988af5c"; // produk
+const BIN_REKENING = "6901807043b1c97be988e00f"; // rekening pembayaran
 const API_KEY = "$2a$10$0anQ3oYLmC5xQJJti0cpMOC9GT3eb1zXjzykbd5Jz92u3qrYuT3F2";
 const BASE_URL = "https://api.jsonbin.io/v3/b/";
 
+// ===================== SAAT HALAMAN DIMUAT =====================
 document.addEventListener("DOMContentLoaded", async () => {
   const user = JSON.parse(localStorage.getItem("antamaUser"));
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (!user) {
-    alert("Silakan login terlebih dahulu!");
+    alert("⚠️ Silakan login terlebih dahulu.");
     window.location.href = "index.html";
     return;
   }
 
   const list = document.getElementById("checkoutList");
   const totalEl = document.getElementById("checkoutTotal");
+  const savedBox = document.getElementById("savedBox");
+  const newBox = document.getElementById("newBox");
   const savedAddress = document.getElementById("savedAddress");
 
-  // === FUNGSI BANTUAN JSONBIN ===
+  // ===================== UTILITAS FETCH =====================
   async function fetchBin(id) {
     const res = await fetch(`${BASE_URL}${id}/latest`, {
-      headers: { "X-Master-Key": API_KEY },
+      headers: { "X-Master-Key": API_KEY }
     });
     const data = await res.json();
     return data.record;
@@ -32,9 +37,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Master-Key": API_KEY,
+        "X-Master-Key": API_KEY
       },
-      body: JSON.stringify(record),
+      body: JSON.stringify(record)
     });
   }
 
@@ -51,98 +56,101 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       const data = await fetchBin(BIN_REKENING);
       return data.rekening || {};
-    } catch {
+    } catch (e) {
+      console.error("Gagal ambil rekening:", e);
       return {};
     }
   }
 
-  // === RENDER KERANJANG ===
+  // ===================== RENDER KERANJANG =====================
   function renderCart() {
     list.innerHTML = "";
     let total = 0;
+
     if (cart.length === 0) {
       list.innerHTML = "<p>Keranjang kosong.</p>";
       totalEl.textContent = "Rp 0";
       return;
     }
+
     cart.forEach((item, i) => {
       const el = document.createElement("div");
       el.className = "checkout-item";
       el.innerHTML = `
-        <div class="item-thumb"><img src="${item.image || 'https://via.placeholder.com/150'}"></div>
+        <div class="item-thumb"><img src="${item.image || 'https://via.placeholder.com/150'}" alt=""></div>
         <div class="item-info">
           <h4>${item.name}</h4>
-          <p>Rp ${item.price.toLocaleString("id-ID")}</p>
+          <p>Rp ${Number(item.price).toLocaleString("id-ID")}</p>
         </div>
         <div class="item-actions">
           <button class="remove-btn" data-index="${i}">Hapus</button>
         </div>`;
       list.appendChild(el);
-      total += item.price;
+      total += Number(item.price) || 0;
     });
+
     totalEl.textContent = `Rp ${total.toLocaleString("id-ID")}`;
   }
-
   renderCart();
 
-  // === HAPUS ITEM KERANJANG ===
-  list.addEventListener("click", e => {
+  // Hapus item dari keranjang
+  list.addEventListener("click", (e) => {
     if (e.target.classList.contains("remove-btn")) {
-      const i = e.target.dataset.index;
-      cart.splice(i, 1);
+      const idx = e.target.dataset.index;
+      cart.splice(idx, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
       renderCart();
     }
   });
 
-  // === ALAMAT TERSIMPAN ===
+  // ===================== RENDER ALAMAT USER =====================
   async function renderSavedAddresses() {
     const users = await fetchUsers();
-    const current = users.find(u => u.email === user.email);
-    const savedBox = document.getElementById("savedBox");
-    const newBox = document.getElementById("newBox");
+    const current = users.find((u) => u.email === user.email);
 
     if (!current || !current.addresses || current.addresses.length === 0) {
-      document.querySelector("input[value='new']").checked = true;
       savedBox.style.display = "none";
       newBox.style.display = "block";
+      document.querySelector("input[value='new']").checked = true;
       savedAddress.innerHTML = "<p>Belum ada alamat tersimpan.</p>";
       return;
     }
 
+    savedBox.style.display = "block";
+    newBox.style.display = "none";
+    document.querySelector("input[value='saved']").checked = true;
     savedAddress.innerHTML = "";
+
     current.addresses.forEach((addr, i) => {
       const div = document.createElement("div");
       div.className = "alamat-item";
       div.innerHTML = `
         <label>
           <input type="radio" name="savedAddr" value="${i}" ${addr.isDefault ? "checked" : ""}>
-          <strong>${addr.label}</strong><br>
-          ${addr.alamat}
-        </label>
-      `;
+          <strong>${addr.label}</strong><br>${addr.alamat}
+        </label>`;
       savedAddress.appendChild(div);
     });
 
     const phone = current.phone || user.phone || "-";
-    const phoneEl = document.createElement("p");
-    phoneEl.innerHTML = `📞 ${phone}`;
-    savedAddress.appendChild(phoneEl);
+    savedAddress.innerHTML += `<p>📞 ${phone}</p>`;
   }
-
   await renderSavedAddresses();
 
-  // === TOGGLE ALAMAT BARU VS TERSIMPAN ===
-  const savedBox = document.getElementById("savedBox");
-  const newBox = document.getElementById("newBox");
-  document.querySelectorAll("input[name='addressOpt']").forEach(r => {
-    r.addEventListener("change", e => {
-      savedBox.style.display = e.target.value === "saved" ? "block" : "none";
-      newBox.style.display = e.target.value === "saved" ? "none" : "block";
+  // Ganti mode alamat
+  document.querySelectorAll("input[name='addressOpt']").forEach((opt) => {
+    opt.addEventListener("change", (e) => {
+      if (e.target.value === "new") {
+        savedBox.style.display = "none";
+        newBox.style.display = "block";
+      } else {
+        savedBox.style.display = "block";
+        newBox.style.display = "none";
+      }
     });
   });
 
-  // === STEP 1 -> STEP 2 ===
+  // ===================== STEP 1 → STEP 2 =====================
   const step1 = document.getElementById("checkoutStep1");
   const step2 = document.getElementById("checkoutStep2");
   const paymentInfo = document.getElementById("paymentInfo");
@@ -152,20 +160,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (cart.length === 0) return alert("Keranjang kosong!");
 
     const addrOpt = document.querySelector("input[name='addressOpt']:checked").value;
-    let valid = true;
+    const payMethod = document.querySelector("input[name='payment']:checked").value;
 
+    // Validasi alamat baru
     if (addrOpt === "new") {
       const name = document.getElementById("checkoutName").value.trim();
       const email = document.getElementById("checkoutEmail").value.trim();
       const phone = document.getElementById("checkoutPhone").value.trim();
       const alamat = document.getElementById("checkoutAlamat").value.trim();
-      if (!name || !email || !phone || !alamat) valid = false;
+      if (!name || !email || !phone || !alamat) {
+        alert("Lengkapi semua data alamat terlebih dahulu!");
+        return;
+      }
     }
 
-    if (!valid) return alert("Lengkapi data alamat terlebih dahulu.");
-
-    const payMethod = document.querySelector("input[name='payment']:checked").value;
-    const total = cart.reduce((s, i) => s + i.price, 0);
+    const total = cart.reduce((sum, i) => sum + (Number(i.price) || 0), 0);
     finalTotal.textContent = `Rp ${total.toLocaleString("id-ID")}`;
 
     const rekening = await fetchRekening();
@@ -173,41 +182,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (payMethod === "transfer") {
       paymentInfo.innerHTML = `
         <p>Silakan transfer ke rekening berikut:</p>
-        <p><strong>${rekening.bank || "-"}</strong><br>
+        <p><strong>${rekening.bank || "Bank"}</strong><br>
         No. Rekening: <strong>${rekening.nomor || "-"}</strong><br>
         a/n ${rekening.nama || "-"}<br>
         <small>${rekening.catatan || ""}</small></p>`;
     } else {
       paymentInfo.innerHTML = `
         <p>Pembayaran via E-Wallet:</p>
-        <p><strong>DANA / OVO / GoPay</strong><br>No. 0812-1234-5678 a/n PT ANTAMA</p>`;
+        <p><strong>DANA / OVO / GoPay</strong><br>
+        No. 0812-1234-5678 a/n PT ANTAMA</p>`;
     }
 
     step1.style.display = "none";
     step2.style.display = "grid";
   });
 
-  // === SIMPAN PESANAN ===
+  // ===================== KONFIRMASI PEMBAYARAN =====================
   document.getElementById("confirmPayment").addEventListener("click", async () => {
+    if (cart.length === 0) return alert("Keranjang kosong!");
+
     const addrOpt = document.querySelector("input[name='addressOpt']:checked").value;
     const payment = document.querySelector("input[name='payment']:checked").value;
     const note = document.getElementById("orderNote").value.trim();
-    const total = cart.reduce((s, i) => s + i.price, 0);
+    const total = cart.reduce((s, i) => s + (Number(i.price) || 0), 0);
 
     let shipping = {};
+    const users = await fetchUsers();
+    const idx = users.findIndex((u) => u.email === user.email);
+    let currentUser = users[idx];
 
     if (addrOpt === "saved") {
       const selected = document.querySelector("input[name='savedAddr']:checked");
       if (!selected) return alert("Pilih salah satu alamat tersimpan.");
-      const idx = parseInt(selected.value);
-      const users = await fetchUsers();
-      const current = users.find(u => u.email === user.email);
-      const addr = current.addresses[idx];
+      const addr = currentUser.addresses[selected.value];
       shipping = {
         name: user.name,
         email: user.email,
-        phone: current.phone || user.phone,
-        alamat: addr ? addr.alamat : ""
+        phone: currentUser.phone || user.phone || "-",
+        alamat: addr.alamat
       };
     } else {
       shipping = {
@@ -216,12 +228,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         phone: document.getElementById("checkoutPhone").value.trim(),
         alamat: document.getElementById("checkoutAlamat").value.trim()
       };
+
+      // Tambahkan alamat baru
+      currentUser.addresses = currentUser.addresses || [];
+      currentUser.addresses.push({
+        label: "Alamat Baru",
+        alamat: shipping.alamat,
+        isDefault: false
+      });
     }
 
     const order = {
       id: "ORD-" + Date.now(),
       date: new Date().toLocaleString("id-ID"),
-      items: cart.map(i => ({ name: i.name, price: i.price })),
+      items: cart.map((i) => ({
+        name: i.name,
+        price: Number(i.price),
+        image: i.image || ""
+      })),
       total,
       payment,
       note,
@@ -229,37 +253,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       status: "Menunggu Konfirmasi"
     };
 
+    currentUser.orders = currentUser.orders || [];
+    currentUser.orders.push(order);
+    users[idx] = currentUser;
+
     try {
-      const users = await fetchUsers();
-      let idx = users.findIndex(u => u.email === user.email);
-      if (idx === -1) {
-        users.push({
-          name: user.name,
-          email: user.email,
-          password: "",
-          phone: shipping.phone,
-          addresses: [{ label: "Alamat Utama", alamat: shipping.alamat, isDefault: true }],
-          orders: []
-        });
-        idx = users.length - 1;
-      }
-
-      users[idx].orders = users[idx].orders || [];
-      users[idx].orders.push(order);
-
-      if (addrOpt === "new") {
-        if (!users[idx].addresses) users[idx].addresses = [];
-        users[idx].addresses.push({ label: "Alamat Baru", alamat: shipping.alamat, isDefault: false });
-      }
-
       await updateUsers(users);
       localStorage.removeItem("cart");
-
-      alert("Pesanan berhasil dikirim.\nAdmin akan memverifikasi pembayaran kamu secara manual.");
-      window.location.href = "home.html";
-    } catch (err) {
-      console.error(err);
-      alert("Terjadi kesalahan, coba lagi nanti.");
+      alert("✅ Pesanan berhasil dikirim! Admin akan memverifikasi pembayaran.");
+      window.location.href = "akun.html";
+    } catch (e) {
+      console.error(e);
+      alert("❌ Gagal menyimpan pesanan, coba lagi nanti.");
     }
   });
 });
