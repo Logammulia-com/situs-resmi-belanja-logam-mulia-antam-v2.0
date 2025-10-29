@@ -7,45 +7,57 @@
   <link rel="stylesheet" href="akun.css">
 
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#c1a14a">
-<link rel="apple-touch-icon" href="icon-512.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ANTAMA">
-<link rel="icon" href="icon-512.png" type="image/png">
-
+  <meta name="theme-color" content="#c1a14a">
+  <link rel="apple-touch-icon" href="icon-512.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ANTAMA">
+  <link rel="icon" href="icon-512.png" type="image/png">
 </head>
+
 <body>
   <header>
     <h1>👤 Akun Saya</h1>
   </header>
 
   <main>
+    <!-- PROFIL -->
     <section id="profileSection">
       <h2>Profil Pengguna</h2>
       <div class="profile-box">
         <label>Nama</label>
         <input type="text" id="nameInput" disabled>
+
         <label>Email</label>
         <input type="text" id="emailInput" disabled>
+
         <label>No. Telepon</label>
         <input type="text" id="phoneInput" placeholder="08xxxxxxxxxx">
+
         <button id="saveProfileBtn">💾 Simpan Profil</button>
       </div>
     </section>
 
+    <!-- ALAMAT -->
     <section id="alamatSection">
       <h2>Alamat Tersimpan</h2>
       <div id="alamatList" class="alamat-list"></div>
       <button id="addAlamatBtn">➕ Tambah Alamat Baru</button>
 
       <div id="alamatForm" class="alamat-form" style="display:none;">
-        <h3>Alamat Baru</h3>
+        <h3>Tambah Alamat Baru</h3>
         <input id="labelInput" placeholder="Label (contoh: Rumah / Kantor)">
-        <textarea id="alamatInput" placeholder="Tulis alamat lengkap..."></textarea>
-        <button id="saveAlamatBtn">Simpan Alamat</button>
+        <input id="namaPenerimaInput" placeholder="Nama Penerima">
+        <input id="teleponPenerimaInput" placeholder="No. Telepon">
+        <textarea id="alamatInput" placeholder="Alamat lengkap (Jalan, RT/RW, No Rumah)"></textarea>
+        <input id="kotaInput" placeholder="Kota / Kabupaten">
+        <input id="provinsiInput" placeholder="Provinsi">
+        <input id="kodeposInput" placeholder="Kode Pos">
+        <label><input type="checkbox" id="defaultAlamat"> Jadikan alamat utama</label>
+        <button id="saveAlamatBtn">💾 Simpan Alamat</button>
       </div>
     </section>
 
+    <!-- PESANAN -->
     <section id="ordersSection">
       <h2>Riwayat Pesanan</h2>
       <div id="orderList" class="order-list">
@@ -56,22 +68,13 @@
     <button id="logoutBtn" class="logout">Keluar</button>
   </main>
 
- <!-- NAV BOTTOM -->
-<nav class="bottom-nav">
-  <button class="nav-btn" onclick="window.location.href='home.html'">
-    🏠<span>Beranda</span>
-  </button>
-  <button class="nav-btn" onclick="window.location.href='harga.html'">
-    💰<span>Harga</span>
-  </button>
-  <button class="nav-btn" onclick="window.location.href='checkout.html'">
-    🛒<span>Keranjang</span>
-  </button>
-  <button class="nav-btn active">
-    👤<span>Akun</span>
-  </button>
-</nav>
-
+  <!-- NAVIGASI BAWAH -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" onclick="window.location.href='home.html'">🏠<span>Beranda</span></button>
+    <button class="nav-btn" onclick="window.location.href='harga.html'">💰<span>Harga</span></button>
+    <button class="nav-btn" onclick="window.location.href='checkout.html'">🛒<span>Keranjang</span></button>
+    <button class="nav-btn active">👤<span>Akun</span></button>
+  </nav>
 
   <script src="akun.js"></script>
 </body>
