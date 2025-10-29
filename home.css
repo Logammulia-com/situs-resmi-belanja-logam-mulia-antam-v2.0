@@ -3,41 +3,128 @@
   --gold-dark: #a18238;
   --bg: #f9f9f9;
   --radius: 14px;
-  --shadow: 0 5px 10px rgba(0,0,0,0.05);
+  --shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
   --font: "Poppins", sans-serif;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
-body { background: var(--bg); color: #333; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font);
+}
 
-/* HEADER */
+body {
+  background: var(--bg);
+  color: #333;
+}
+
+/* ===============================
+   HEADER UTAMA (MOBILE & DESKTOP)
+   =============================== */
 .mobile-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background: white;
-  padding: 15px 20px;
+  justify-content: space-between;
+  background: #fff;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
   box-shadow: var(--shadow);
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 100;
 }
+
 .logo {
   font-weight: 700;
   color: var(--gold);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  flex-shrink: 0;
 }
-.header-icons {
+
+/* === Search bar di tengah === */
+.header-search {
   display: flex;
-  gap: 15px;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 4px 10px;
+  flex: 1;
+  margin: 0 10px;
+  min-width: 0;
 }
-.icon {
+
+.header-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+  color: #333;
+}
+
+.header-search .search-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-left: 6px;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.header-search .search-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* === Ikon profil di kanan === */
+.header-icons {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icons .icon {
   width: 26px;
   height: 26px;
   cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-/* SECTION */
+.header-icons .icon:hover {
+  transform: scale(1.1);
+  opacity: 0.85;
+}
+
+/* ===============================
+   RESPONSIVE HEADER MOBILE
+   =============================== */
+@media (max-width: 480px) {
+  .mobile-header {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .logo {
+    font-size: 1rem;
+  }
+
+  .header-search {
+    margin: 0 5px;
+    padding: 4px 8px;
+  }
+
+  .header-icons .icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ===============================
+   SECTION
+   =============================== */
 .section-title {
   text-align: center;
   color: var(--gold-dark);
@@ -45,13 +132,16 @@ body { background: var(--bg); color: #333; }
   margin: 20px 0;
 }
 
-/* PRODUK GRID */
+/* ===============================
+   PRODUK GRID
+   =============================== */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
   padding: 0 10px 80px;
 }
+
 .product-card {
   background: #fff;
   border-radius: var(--radius);
@@ -60,21 +150,28 @@ body { background: var(--bg); color: #333; }
   text-align: center;
   transition: 0.3s ease;
 }
-.product-card:hover { transform: translateY(-4px); }
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
 .product-card img {
   width: 100%;
   height: 150px;
   object-fit: cover;
 }
+
 .product-card h3 {
   margin: 10px 0 5px;
   font-size: 1rem;
 }
+
 .price {
   color: var(--gold);
   font-weight: 600;
   margin-bottom: 10px;
 }
+
 .btn {
   background: var(--gold);
   color: white;
@@ -85,97 +182,20 @@ body { background: var(--bg); color: #333; }
   margin-bottom: 10px;
   transition: 0.3s;
 }
-.btn:hover { background: var(--gold-dark); }
-.btn.red { background: #e74c3c; }
-.btn.small { padding: 7px 10px; font-size: 0.85rem; }
 
-/* HARGA LIST */
-.harga-list {
-  background: white;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  max-width: 400px;
-  margin: 10px auto 80px;
-  padding: 10px 15px;
-}
-.harga-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+.btn:hover {
+  background: var(--gold-dark);
 }
 
-/* KERANJANG */
-.cart-list {
-  background: white;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin: 10px 10px 80px;
-  padding: 15px;
-}
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-.checkout-btn {
-  width: 90%;
-  display: block;
-  margin: 20px auto;
+.btn.red {
+  background: #e74c3c;
 }
 
-/* AKUN */
-.akun-box {
-  background: white;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin: 10px;
-  padding: 15px;
-}
-.akun-box input {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+.btn.small {
+  padding: 7px 10px;
+  font-size: 0.85rem;
 }
 
-/* NAV BOTTOM */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: white;
-  display: flex;
-  justify-content: space-around;
-  border-top: 1px solid #eee;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-  z-index: 100;
-}
-.nav-btn {
-  flex: 1;
-  border: none;
-  background: none;
-  padding: 10px 0;
-  font-size: 1.1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #777;
-  transition: 0.2s;
-}
-.nav-btn.active, .nav-btn:hover {
-  color: var(--gold-dark);
-}
-.nav-btn span {
-  font-size: 0.8rem;
-}
-
-/* PAGE VISIBILITY */
-.page { display: none; padding-bottom: 70px; }
-.page.active { display: block; }
 .product-actions {
   display: flex;
   justify-content: space-between;
@@ -188,52 +208,143 @@ body { background: var(--bg); color: #333; }
   font-size: 13px;
   padding: 6px 0;
 }
-/* 🔍 Search Icon Header */
-.search-icon {
-  width: 22px;
-  height: 22px;
-  margin-right: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.search-icon:hover {
-  transform: scale(1.1);
+
+/* ===============================
+   HARGA LIST
+   =============================== */
+.harga-list {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 400px;
+  margin: 10px auto 80px;
+  padding: 10px 15px;
 }
 
-.search-box-header {
-  display: none;
-  position: absolute;
-  top: 55px;
-  right: 60px;
-  background: #fff;
+.harga-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* ===============================
+   KERANJANG
+   =============================== */
+.cart-list {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 10px 10px 80px;
+  padding: 15px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.checkout-btn {
+  width: 90%;
+  display: block;
+  margin: 20px auto;
+}
+
+/* ===============================
+   AKUN
+   =============================== */
+.akun-box {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 10px;
+  padding: 15px;
+}
+
+.akun-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 10px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  padding: 6px;
-  z-index: 50;
-}
-.search-box-header input {
-  width: 180px;
-  padding: 6px 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
 }
 
-/* Modal Produk */
+/* ===============================
+   NAVIGASI BAWAH
+   =============================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #eee;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.nav-btn {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 10px 0;
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #777;
+  transition: 0.2s;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+  color: var(--gold-dark);
+}
+
+.nav-btn span {
+  font-size: 0.8rem;
+}
+
+/* ===============================
+   PAGE VISIBILITY
+   =============================== */
+.page {
+  display: none;
+  padding-bottom: 70px;
+}
+
+.page.active {
+  display: block;
+}
+
+/* ===============================
+   MODAL PRODUK
+   =============================== */
 .modal {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
   z-index: 200;
   animation: fadeIn 0.2s ease;
 }
+
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
@@ -243,12 +354,19 @@ body { background: var(--bg); color: #333; }
   width: 90%;
   max-width: 400px;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation: popUp 0.25s ease;
 }
+
 @keyframes popUp {
-  from { transform: scale(0.9); opacity: 0.5; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .modal-content img {
@@ -276,72 +394,7 @@ body { background: var(--bg); color: #333; }
   cursor: pointer;
   transition: 0.2s;
 }
+
 .close-modal:hover {
   background: #c0392b;
-}
-/* ============================= */
-/* 🔍 SEARCH DI HEADER */
-/* ============================= */
-.mobile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 8px 12px;
-  border-bottom: 1px solid #eee;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-search {
-  display: flex;
-  align-items: center;
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 4px 8px;
-  width: 55%;
-  gap: 6px;
-}
-
-.header-search input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  outline: none;
-  color: #333;
-}
-
-.search-icon {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: 0.2s;
-}
-.search-icon:hover {
-  opacity: 1;
-}
-
-/* Header icons */
-.header-icons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.icon {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-}
-.header-icons .icon {
-  cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.header-icons .icon:hover {
-  transform: scale(1.1);
-  opacity: 0.85;
 }
