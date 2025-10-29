@@ -2,59 +2,23 @@
 // KONFIGURASI JSONBIN
 // ============================
 const BIN_PRODUCTS = "6901673443b1c97be988af5c"; // produk
-const BIN_PRICES = "69016b77ae596e708f34751c"; // harga
+const BIN_PRICES = "69016b77ae596e708f34751c";  // harga
 const API_KEY = "$2a$10$0anQ3oYLmC5xQJJti0cpMOC9GT3eb1zXjzykbd5Jz92u3qrYuT3F2";
 const BASE_URL = "https://api.jsonbin.io/v3/b/";
 
 // ============================
-// CEK LOGIN (boleh tanpa login)
+// CEK LOGIN
 // ============================
 function isLoggedIn() {
   return localStorage.getItem("antamaUser") !== null;
 }
 
-// ============================
-// ELEMEN UTAMA
-// ============================
-const tabButtons = document.querySelectorAll(".nav-btn[data-target]");
-const sections = document.querySelectorAll("main section");
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem("antamaUser"));
+}
 
 // ============================
-// NAVIGASI ANTAR TAB
-// ============================
-tabButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    tabButtons.forEach(b => b.classList.remove("active"));
-    sections.forEach(s => s.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.target).classList.add("active");
-  });
-});
-
-// ============================
-// LINK KE HALAMAN LAIN
-// ============================
-// Tombol harga di bawah
-document.getElementById("hargaBtn").addEventListener("click", () => {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("hargaSection").classList.add("active");
-});
-
-// Tombol akun di navigasi bawah
-document.getElementById("akunBtn").addEventListener("click", () => {
-  if (isLoggedIn()) {
-    // kalau sudah login, buka halaman akun
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById("akunSection").classList.add("active");
-  } else {
-    // kalau belum login, ke index.html
-    alert("Silakan login terlebih dahulu untuk mengakses akun Anda.");
-    window.location.href = "index.html";
-  }
-});
-
-// ============================
-// AMBIL DATA DARI JSONBIN
+// AMBIL DATA JSONBIN
 // ============================
 async function fetchBin(id) {
   const res = await fetch(`${BASE_URL}${id}/latest`, {
@@ -97,7 +61,7 @@ async function renderProducts(keyword = "") {
       </div>
     `;
 
-    // Klik gambar → buka modal detail
+    // klik gambar → modal
     card.querySelector(".clickable").addEventListener("click", () => {
       const modal = document.getElementById("productModal");
       modal.querySelector("img").src = p.image;
@@ -106,7 +70,7 @@ async function renderProducts(keyword = "") {
       modal.style.display = "flex";
     });
 
-    // Tambah ke keranjang → wajib login
+    // tambah ke keranjang
     card.querySelector(".add-cart").addEventListener("click", () => {
       if (!isLoggedIn()) {
         alert("Silakan login terlebih dahulu untuk menambahkan ke keranjang.");
@@ -114,21 +78,45 @@ async function renderProducts(keyword = "") {
         return;
       }
       addToCart(p);
+      if (confirm("Produk ditambahkan ke keranjang. Lihat keranjang sekarang?")) {
+        window.location.href = "checkout.html";
+      }
     });
 
-    // Beli sekarang → wajib login
+    // beli sekarang
     card.querySelector(".buy-now").addEventListener("click", () => {
       if (!isLoggedIn()) {
         alert("Silakan login terlebih dahulu untuk melakukan pembelian.");
         window.location.href = "index.html";
         return;
       }
-      localStorage.setItem("cart", JSON.stringify([p]));
-      window.location.href = "checkout.html";
+      addToCart(p, true);
     });
 
     grid.appendChild(card);
   });
+}
+
+// ============================
+// KERANJANG
+// ============================
+function getCart() {
+  const user = getCurrentUser();
+  const key = `cart_${user.email}`;
+  return JSON.parse(localStorage.getItem(key)) || [];
+}
+
+function saveCart(cart) {
+  const user = getCurrentUser();
+  const key = `cart_${user.email}`;
+  localStorage.setItem(key, JSON.stringify(cart));
+}
+
+function addToCart(item, directBuy = false) {
+  const cart = getCart();
+  cart.push(item);
+  saveCart(cart);
+  if (directBuy) window.location.href = "checkout.html";
 }
 
 // ============================
@@ -152,7 +140,7 @@ document.getElementById("searchIcon").addEventListener("click", () => {
 });
 
 // ============================
-// RENDER HARGA
+// HARGA EMAS
 // ============================
 async function renderPrices() {
   const data = await fetchBin(BIN_PRICES);
@@ -168,42 +156,20 @@ async function renderPrices() {
 }
 
 // ============================
-// KERANJANG BELANJA
+// PROFIL / AKUN
 // ============================
-function addToCart(item) {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.push(item);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert(`${item.name} ditambahkan ke keranjang`);
-  renderCart();
-}
-
-function renderCart() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const list = document.getElementById("cartContainer");
-  list.innerHTML = "";
-  if (cart.length === 0) {
-    list.innerHTML = "<p>Keranjang kosong.</p>";
-    return;
+document.addEventListener("DOMContentLoaded", () => {
+  const headerAccountIcon = document.getElementById("headerAccountIcon");
+  if (headerAccountIcon) {
+    headerAccountIcon.style.cursor = "pointer";
+    headerAccountIcon.addEventListener("click", () => {
+      if (isLoggedIn()) {
+        window.location.href = "akun.html";
+      } else {
+        window.location.href = "index.html";
+      }
+    });
   }
-  cart.forEach(i => {
-    const div = document.createElement("div");
-    div.className = "cart-item";
-    div.innerHTML = `
-      <span>${i.name}</span>
-      <strong>Rp ${i.price.toLocaleString("id-ID")}</strong>
-    `;
-    list.appendChild(div);
-  });
-}
-
-document.getElementById("checkoutBtn").addEventListener("click", () => {
-  if (!isLoggedIn()) {
-    alert("Silakan login terlebih dahulu untuk melanjutkan ke checkout.");
-    window.location.href = "index.html";
-    return;
-  }
-  window.location.href = "checkout.html";
 });
 
 // ============================
@@ -211,33 +177,3 @@ document.getElementById("checkoutBtn").addEventListener("click", () => {
 // ============================
 renderProducts();
 renderPrices();
-renderCart();
-
-// ============================
-// REGISTRASI SERVICE WORKER
-// ============================
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("service-worker.js")
-    .then(() => console.log("✅ Service Worker terdaftar"))
-    .catch(err => console.log("❌ Gagal daftar Service Worker:", err));
-}
-
-// ============================
-// KLIK IKON PROFIL DI HEADER
-// ============================
-document.addEventListener("DOMContentLoaded", () => {
-  const headerAccountIcon = document.getElementById("headerAccountIcon");
-  if (headerAccountIcon) {
-    headerAccountIcon.style.cursor = "pointer";
-    headerAccountIcon.addEventListener("click", () => {
-      if (!isLoggedIn()) {
-        alert("Silakan login terlebih dahulu untuk melakukan transaksi.");
-        window.location.href = "index.html";
-      } else {
-        document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-        document.getElementById("akunSection").classList.add("active");
-      }
-    });
-  }
-});
